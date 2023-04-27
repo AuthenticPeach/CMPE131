@@ -1,8 +1,9 @@
-from flask import Flask, redirect, render_template, url_for
+from flask import Flask, redirect, render_template, url_for, request
 from flask_login import current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import UserManager, UserMixin
 from views import views
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.register_blueprint(views, url_prefix="/")
@@ -19,7 +20,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255), nullable=False, server_default='')
 
 # Flask-User settings
-app.config['USER_APP_NAME'] = "YourApp"
+app.config['USER_APP_NAME'] = "City Website"
 app.config['USER_ENABLE_EMAIL'] = False  # Change to True if you want email-based registration
 app.config['USER_ENABLE_USERNAME'] = True
 app.config['USER_REQUIRE_RETYPE_PASSWORD'] = True
@@ -30,8 +31,8 @@ user_manager = UserManager(app, db, User)
 # Routes
 @app.route('/')
 def home():
-    name = "John"  # Replace with the actual name
-    age = 25  # Replace with the actual age
+    return 'Welcome to the home page!'
+
 
 
 @app.route('/profile')
