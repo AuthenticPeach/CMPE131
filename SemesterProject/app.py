@@ -3,10 +3,12 @@ from flask_login import current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import UserManager, UserMixin
 from views import views
+from auth import auth
 from flask_mail import Mail, Message
 
 app = Flask(__name__)
-app.register_blueprint(views, url_prefix="/")
+app.register_blueprint(views)
+app.register_blueprint(auth, url_prefix="/auth")
 
 app.config['SECRET_KEY'] = 'your_secret_key'  # Change this to a secure secret key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'  # Change the database URI
@@ -33,12 +35,10 @@ user_manager = UserManager(app, db, User)
 def home():
     return 'Welcome to the home page!'
 
-
-
 @app.route('/profile')
 def profile():
     if not current_user.is_authenticated:
-        return redirect(url_for('user.login'))
+        return redirect(url_for('auth.login'))
 
     return f'Welcome, {current_user.username}!'
 
