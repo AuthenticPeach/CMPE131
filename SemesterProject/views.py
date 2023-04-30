@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
+from flask_login import current_user
 
 views = Blueprint(__name__, "views")
 
@@ -6,7 +7,11 @@ views = Blueprint(__name__, "views")
 
 @views.route("/")
 def home():
-    return render_template("index.html", name="Tim", age="25")
+    return render_template("home.html", user=current_user)
+
+@views.route("/about")
+def about():
+    return render_template("index.html")
 
 ## Query Parameters
 
