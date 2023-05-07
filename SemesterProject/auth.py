@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
+from CMPE131Website.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db   ##means from __init__.py import db
+from CMPE131Website.app import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
-
+from flask_sqlalchemy import SQLAlchemy
 
 auth = Blueprint('auth', __name__)
 
@@ -14,18 +14,34 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = User.query.filter_by(email=email).first()
-        if user:
-            if check_password_hash(user.password, password):
-                flash('Logged in successfully!', category='success')
-                login_user(user, remember=True)
-                return redirect(url_for('views.home'))
-            else:
-                flash('Incorrect password, try again.', category='error')
-        else:
-            flash('Email does not exist.', category='error')
-
-    return render_template("login.html", user=current_user)
+       # Authenticate user
+    user = User.query.filter_by(username=username).first()
+    if user and user.password == password:
+        # Successful login
+        # Create a new LoginHistory record
+        login_history = LoginHistory(
+            user_id=user.id,
+            user_type=user.user_type,
+            ip_address=request.remote_addr,
+            login_status='Success'
+        )
+        db.session.add(login_history)
+        db.session.commit()
+        # Redirect to the desired page
+        return redirect(url_for('views.home'))
+    else:
+        # Failed login
+        # Create a new LoginHistory record
+        login_history = LoginHistory(
+            user_id=user.id if user else None,
+            user_type=user.user_type if user else None,
+            ip_address=request.remote_addr,
+            login_status='Failure'
+        )
+        db.session.add(login_history)
+        db.session.commit()
+        # Show an error message to the user
+        return render_template('login.html', error='Invalid username or password')
 
 @auth.route('/logout')
 @login_required

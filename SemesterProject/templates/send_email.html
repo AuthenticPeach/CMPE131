@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send Email</title>
+</head>
+<body>
+    <h2>Send Email</h2>
+    <form method="POST" action="{{ url_for('send_email') }}">
+        <input type="email" name="recipient" placeholder="Recipient" required><br>
+        <input type="text" name="subject" placeholder="Subject" required><br>
+        <textarea name="body" rows="4" placeholder="Body" required></textarea><br>
+        <input type="submit" value="Send Email">
+    </form>
+</body>
+</html>

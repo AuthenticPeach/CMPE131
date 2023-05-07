@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content%}
+    <div class="container">
+      <h1 align="center">Login</h3>
+      <div class="form-group">
+        <br/>
+        <form action="/users" METHOD="POST">
+            <input type="text" placeholder="Name" name="name">
+            <input type="submit" value="Add Name" class="btn btn-secondary">
+      </form>
+      <br/><br/>
+      {% for user in users %}
+        <h4>
+            {{user.name}}
+        </h4>
+    {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+     <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      crossorigin="anonymous"
+    />      
+    <title>{% block title %} Manage Users {% endblock %}</title>
+    <!-- Add your CSS stylesheets and JavaScript files here -->
+    <style>
+        /* Customize the styles as per your requirements */
+        .user-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .user-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .user-name {
+            font-weight: bold;
+        }
+        .user-email {
+            color: #888;
+        }
+        .user-actions {
+            margin-left: auto;
+        }
+        .user-actions button {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbar"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar">
+          <div class="navbar-nav">
+   
+            <a class="nav-item nav-link" id="home" href="/">Home</a>
+            <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+            <a class="nav-item nav-link" id="adminDashboard" href="/admin/dashboard">Admin Dashboard</a>   
+            <a class="nav-item nav-link" id="contact" href="/contact">Contact</a>          
+         
+          </div>
+        </div>
+      </nav>    
+    <h1>Manage Users</h1>
+
+    <ul class="user-list">
+        {% for user in users %}
+        <li class="user-item">
+            <img class="user-avatar" src="{{ user.avatar }}" alt="User Avatar">
+            <div>
+                <p class="user-name">{{ user.name }}</p>
+                <p class="user-email">{{ user.email }}</p>
+            </div>
+            <div class="user-actions">
+                <button>Edit</button>
+                <button>Delete</button>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!-- analytics.html -->
+<h1>Website Analytics</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Page Views</th>
+      <th>Visitors</th>
+      <!-- Add more columns as needed -->
+    </tr>
+  </thead>
+  <tbody>
+    {% for stat in statistics %}
+    <tr>
+      <td>{{ stat.date }}</td>
+      <td>{{ stat.page_views }}</td>
+      <td>{{ stat.visitors }}</td>
+      <!-- Display more statistics columns as needed -->
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
