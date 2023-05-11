@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      crossorigin="anonymous"
+    />    
+    <title>Add New Content</title>
+    <!-- Add your CSS stylesheets and JavaScript files here -->
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar">
+        <div class="navbar-nav">
+          {% if user.is_authenticated %}
+          <a class="nav-item nav-link" id="adminDashboard" href="/admin/dashboard">Admin Dashboard</a>           
+          <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+          {% else %}
+          <a class="nav-item nav-link" id="home" href="/">Home</a>          
+          <a class="nav-item nav-link" id="login" href="/auth/login">Login</a>
+          <a class="nav-item nav-link" id="signUp" href="/auth/sign-up">Sign Up</a>
+          <a class="nav-item nav-link" id="contact" href="/contact">Contact</a>          
+          {% endif %}      
+        </div>
+      </div>
+    </nav>
+    <!-- Add your content creation form and other elements here -->
+    <h1>Add New Content</h1>
+    <form action="/add-content" method="POST">
+        <!-- Add your form fields for content creation -->
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Enter the title">
+        </div>
+        <div class="form-group">
+            <label for="content">Content</label>
+            <textarea class="form-control" id="content" name="content" rows="5" placeholder="Enter the content"></textarea>
+        </div>
+        <!-- Add more form fields as needed -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <div id="dynamic-sections">
+        <!-- Placeholder for dynamically added sections -->
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var form = document.querySelector("form");
+    
+            form.addEventListener("submit", function(event) {
+                event.preventDefault();
+    
+                // Get the form data
+                var title = document.getElementById("title").value;
+                var content = document.getElementById("content").value;
+    
+                // Create the new section HTML
+                var sectionHTML = `
+                    <div class="section">
+                        <h2 class="section-title">${title}</h2>
+                        <p>${content}</p>
+                    </div>
+                `;
+    
+                // Append the new section to the admin_dashboard.html
+                var dynamicSections = document.getElementById("dynamic-sections");
+                dynamicSections.insertAdjacentHTML("beforeend", sectionHTML);
+    
+                // Reset the form
+                form.reset();
+            });
+        });
+    </script>
+</body>
+</html>
