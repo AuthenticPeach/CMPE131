@@ -17,13 +17,14 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
 
-@app.route('/')
+@app.route('/index')
 def index():
     return render_template('index.html')
 # Routes
 @app.route('/')
 def home():
-    return 'Welcome to the home page!'
+#    return 'Welcome to the home page!'
+    return render_template('index.html')
 
 # Function to return a string when we add something
     # def __repr__(self):
@@ -42,23 +43,27 @@ user_manager = UserManager(app, db, User)
 from views import views
 app.register_blueprint(views)
 
+from passlib.hash import pbkdf2_sha256
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user and user.password == password:
+        if user and pbkdf2_sha256.verify(password, user.password):
             login_user(user)
             return redirect(url_for('index'))
     return render_template('login.html')
 
-@app.route('/register', methods=['GET', 'POST'])
+from passlib.hash import pbkdf2_sha256
+app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        new_user = User(username=username, password=password)
+        hashed_password = pbkdf2_sha256.hash(password)
+        new_user = User(username=username, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
@@ -96,7 +101,7 @@ def users():
 @app.route('/profile')
 def profile():
     if not current_user.is_authenticated:
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('user.login'))
 
     return f'Welcome, {current_user.username}!'
 
