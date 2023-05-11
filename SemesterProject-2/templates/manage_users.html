@@ -73,10 +73,16 @@
     <ul class="user-list">
         {% for user in users %}
         <li class="user-item">
-            <img class="user-avatar" src="{{ user.avatar }}" alt="User Avatar">
+            {% if user.avatar %}
+            <img class="user-avatar" src="{{ url_for('static', filename='avatars/' + user.avatar) }}" alt="User Avatar">
+            {% else %}
+            <img class="user-avatar" src="/static/icons/default-avatar.png" alt="User Avatar">
+            {% endif %}
             <div>
                 <p class="user-name">{{ user.name }}</p>
                 <p class="user-email">{{ user.email }}</p>
+                <p class="user-id">{{ user.id }}</p>
+                <p class="user-username">{{ user.username }}</p>
             </div>
             <div class="user-actions">
                 <button>Edit</button>

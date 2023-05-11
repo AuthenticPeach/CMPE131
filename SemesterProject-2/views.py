@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
 from flask_login import login_required, current_user
-
 import json
 
 views = Blueprint("views",__name__)
@@ -37,20 +36,6 @@ def analytics():
 def contact():
     return render_template("contact.html", user=current_user)
 
-
-@views.route('/manage-users')
-def manage_users():
-    # Retrieve the list of users from the database or any other data source
-    # Pass the list of users to the template for rendering
-
-    users = [
-        {'name': 'John Doe', 'email': 'john@example.com', 'avatar': '/static/icons/PugPlushieOtis.png'},
-        {'name': 'Jane Smith', 'email': 'jane@example.com', 'avatar': '/static/icons/AZ_Maid.png'},
-
-        # Add more users as needed
-    ]
-
-    return render_template('manage_users.html', users=users)
 
 ## Query Parameters
 

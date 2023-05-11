@@ -16,6 +16,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
+    active = db.Column(db.Boolean(), nullable=False, default=True)
 
 @app.route('/index')
 def index():
@@ -31,7 +32,7 @@ def home():
     #     return '<Name %r>' % self.id
 
 # Flask-User settings
-app.config['USER_APP_NAME'] = "City Website"
+app.config['USER_APP_NAME'] = "City of Williamston"
 app.config['USER_ENABLE_EMAIL'] = False  # Change to True if you want email-based registration
 app.config['USER_ENABLE_USERNAME'] = True
 app.config['USER_REQUIRE_RETYPE_PASSWORD'] = True
@@ -43,28 +44,21 @@ user_manager = UserManager(app, db, User)
 from views import views
 app.register_blueprint(views)
 
-from passlib.hash import pbkdf2_sha256
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user and pbkdf2_sha256.verify(password, user.password):
-            login_user(user)
-            return redirect(url_for('index'))
+        return redirect(url_for('index'))
     return render_template('login.html')
 
-from passlib.hash import pbkdf2_sha256
+
 app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        hashed_password = pbkdf2_sha256.hash(password)
-        new_user = User(username=username, password=hashed_password)
-        db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
     return render_template('register.html')
@@ -79,6 +73,20 @@ def logout():
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
+@app.route('/manage-users')
+def manage_users():
+    # Retrieve the list of users from the database or any other data source
+    # Pass the list of users to the template for rendering
+
+    # users = [
+    #     {'name': 'John Doe', 'email': 'john@example.com', 'avatar': '/static/icons/PugPlushieOtis.png'},
+    #     {'name': 'Jane Smith', 'email': 'jane@example.com', 'avatar': '/static/icons/AZ_Maid.png'},
+
+    #     # Add more users as needed
+    # ]
+    users = User.query.all()
+    return render_template('manage_users.html', users=users)
 
 @app.route('/users', methods=['POST', 'GET'])
 def users():

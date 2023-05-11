@@ -1,0 +1,12 @@
+RewriteEngine On
+RewriteBase /home/ab77wkgextdl/
+
+RewriteRule ^CMPE131Website\.wsgi/ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ ^CMPE131Website.wsgi/$1 [QSA,L]
+
+PassengerEnabled on
+PassengerAppRoot /home/ab77wkgextdl/
+PassengerPython /usr/bin/python3
+PassengerStartupFile app.py
+SetEnv HOME /home/ab77wkgextdl/
